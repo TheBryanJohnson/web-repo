@@ -16,6 +16,8 @@ allParams={
 
 validUnits = ["parsec", "lightyear", "xlarn", "galacticyear", "xarnyear", "terrestrialyear", "kilometer", "terrestrialminutes"]
 
+
+
 def checkExist():
 	#parName = origunits, convunits, etc
 	#parInfo = list which contains "Label", "Exists", etc
@@ -27,18 +29,24 @@ def checkExist():
 			parInfo["Value"] = givenParams[parName].value
 		
 def checkInput():
-	#numunits and convfactor must be a float or int
+	#numunits and convfactor must be some type of numerical objects
 	numunits = allParams["numunits"]["Value"]
 	convfactor = allParams["convfactor"]["Value"]
-	#Could have made this a loop, didn't since it's only 2 checks and would invole
-	#chopping up the data structure
-	if isinstance(numunits, (int, float, long)):
+	#The objects are coming through as 'NoneType'; try to cast them into floats
+	#with some generic error handling
+	try:
+		allParams["numunits"]["Value"] = float(numunits)
 		allParams["numunits"]["Valid"] = True
-	if isinstance(convfactor, (int, float, long)):
+	except:
+		pass
+	try:
+		allParams["convfactor"]["Value"] = float(convfactor)
 		allParams["convfactor"]["Valid"] = True
+	except:
+		pass
 	
 	#origunits and convunits must both exist in validUnits
-	#Same as above, did not bother looping
+	#Since there's only two checks, did not bother looping
 	if allParams["origunits"]["Value"] in validUnits:
 		allParams["origunits"]["Valid"] = True
 	if allParams["convunits"]["Value"] in validUnits:
@@ -47,7 +55,8 @@ def checkInput():
 def main():
 	checkExist()
 	checkInput()
-	for parName, parInfo in allParams.iteritems():
-		print parName, parInfo["Exists"], type(parInfo["Value"]), parInfo["Valid"]
+	#for parName, parInfo in allParams.iteritems():
+	#	print parName, parInfo["Exists"], parInfo["Value"], parInfo["Valid"]
+		
 	
 main()
