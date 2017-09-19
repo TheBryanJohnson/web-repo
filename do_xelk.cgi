@@ -102,7 +102,6 @@ def parseHTML(convAns):
 		
 
 def main():
-	print HTML_TEMPLATE
 	checkExist()
 	checkInput()
 	#for parName, parInfo in allParams.iteritems():
