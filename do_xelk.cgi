@@ -28,24 +28,6 @@ CONV_FACTORS = [
 ("terrestrialyear", 525600, "terrestrialminute")
 ]
 
-HTML_TEMPLATE ="""
-<head>
-  <title>Galactic Conversion</title>
-</head>
-<body>
-  <h1 id='origunits'></h1>
-  <br>
-  <h1 id='convunits'></h1>
-  <br>
-  <h1 id='numunits'></h1>
-  <br>
-  <h1 id='convfactor'></h1>
-  <br><br>
-  <HR noshade SIZE=50>
-  <br><br>
-  <h1 id='result'></h1>
-</body>
-</html>"""
 
 def checkExist():
 	#parName = origunits, convunits, etc
@@ -92,8 +74,32 @@ def convUnits(unit1, unit2):
 			return amt/tup[1]
 	return None
 
-def parseHTML():
+def parseHTML(convAns):
+	paramMissing = False
+	invalidValue = False
 	
+
+	top = """
+	<head>
+  	<title>Galactic Conversion</title>
+	</head>
+	<body>
+  	"""
+
+	bottom = """
+	</body>
+	</html>
+	"""
+
+	orig = allParams["origunits"]
+	conv = allParams["convunits"]
+	amt = allParams["numunits"]
+	convF = allParams["convfactor"]
+
+	if orig["Exists"] and orig["Valid"] and convAns is not None:
+		top += "<h1 style='color:blue;'>",orig["Label"],": \"",orig["Value"],"\"</h1>"
+ 
+		
 
 def main():
 	print HTML_TEMPLATE
@@ -101,7 +107,8 @@ def main():
 	checkInput()
 	#for parName, parInfo in allParams.iteritems():
 	#	print parName, parInfo["Exists"], parInfo["Value"], parInfo["Valid"]
-	#conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
-	#convFact = allParams["convfactor"]["Value"]
+	conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
+	convFact = allParams["convfactor"]["Value"]
+	print conv*convFact
 
 main()
