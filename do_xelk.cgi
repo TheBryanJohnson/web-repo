@@ -14,9 +14,38 @@ allParams={
 "convfactor": {"Label":"Conversion Factor", "Exists":False, "Value":None, "Valid":False}
 }
 
-validUnits = ["parsec", "lightyear", "xlarn", "galacticyear", "xarnyear", "terrestrialyear", "kilometer", "terrestrialminutes"]
+#Possibly add support for plurl forms of units TODO 
+#(would also involve changing CONV_FACTORS)
+#(todo, See docs for clarification?)
+validUnits = ["parsec", "lightyear", "xlarn", "galacticyear", "xarnyear", "terrestrialyear", "kilometer", "terrestrialminute"]
 
+CONV_FACTORS = [
+("parsec", 3.26, "lightyear"),
+("lightyear", 3.086e13, "kilometer"),
+("xlarn", 7.3672, "parsec"),
+("galacticyear", 250000000, "terrestrialyear"),
+("xarnyear", 1.2579, "terrestrialyear"),
+("terrestrialyear", 525600, "terrestrialminute")
+]
 
+HTML_TEMPLATE ="""
+<head>
+  <title>Galactic Conversion</title>
+</head>
+<body>
+  <h1 id='origunits'></h1>
+  <br>
+  <h1 id='convunits'></h1>
+  <br>
+  <h1 id='numunits'></h1>
+  <br>
+  <h1 id='convfactor'></h1>
+  <br><br>
+  <HR noshade SIZE=50>
+  <br><br>
+  <h1 id='result'></h1>
+</body>
+</html>"""
 
 def checkExist():
 	#parName = origunits, convunits, etc
@@ -52,11 +81,27 @@ def checkInput():
 	if allParams["convunits"]["Value"] in validUnits:
 		allParams["convunits"]["Valid"] = True
 
+#unit1: string, first unit in conversion
+#unit2: string, second unit in conversion
+def convUnits(unit1, unit2):
+	amt = allParams["numunits"]["Value"]
+	for tup in CONV_FACTORS:
+		if unit1 == tup[0] and unit2 == tup[2]:
+			return amt*tup[1]
+		if unit1 == tup[2] and unit2 == tup[0]:
+			return amt/tup[1]
+	return None
+
+def parseHTML():
+	
+
 def main():
+	print HTML_TEMPLATE
 	checkExist()
 	checkInput()
 	#for parName, parInfo in allParams.iteritems():
 	#	print parName, parInfo["Exists"], parInfo["Value"], parInfo["Valid"]
-		
-	
+	#conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
+	#convFact = allParams["convfactor"]["Value"]
+
 main()
