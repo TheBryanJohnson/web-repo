@@ -97,7 +97,11 @@ def parseHTML(convAns):
 	convF = allParams["convfactor"]
 
 	if orig["Exists"] and orig["Valid"] and convAns is not None:
-		top += "<h1 style='color:blue;'>",orig["Label"],": \"",orig["Value"],"\"</h1>"
+		top += "<h3 style='color:blue;'>"+str(orig["Label"])+": \""+str(orig["Value"])+"\"</h1>"
+	else:
+		top += "<h3 style='color:red;'>"+str(orig["Label"])+": Parameter missing or bad!</h1>"
+
+	return top+bottom
  
 		
 
@@ -106,8 +110,8 @@ def main():
 	checkInput()
 	#for parName, parInfo in allParams.iteritems():
 	#	print parName, parInfo["Exists"], parInfo["Value"], parInfo["Valid"]
-	conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
-	convFact = allParams["convfactor"]["Value"]
-	print conv*convFact
+	#conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
+	#convFact = allParams["convfactor"]["Value"]
+	print parseHTML(1)
 
 main()
