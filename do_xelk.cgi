@@ -1,4 +1,9 @@
 #!/usr/bin/python
+
+#William Miller
+#Bryan Johnson
+#CS316 project 1
+
 import cgi
 
 print 'Content-type: text/html\n\n'
@@ -74,9 +79,8 @@ def convUnits(unit1, unit2):
 			return amt/tup[1]
 	return None
 
-def parseHTML(convAns):
-	paramMissing = False
-	invalidValue = False
+def parseHTML():
+	invalidInput = False
 	
 
 	top = """
@@ -91,16 +95,25 @@ def parseHTML(convAns):
 	</html>
 	"""
 
-	orig = allParams["origunits"]
-	conv = allParams["convunits"]
-	amt = allParams["numunits"]
-	convF = allParams["convfactor"]
+	parms = [allParams["origunits"], allParams["convunits"], allParams["numunits"], allParams["convfactor"]]
 
-	if orig["Exists"] and orig["Valid"] and convAns is not None:
-		top += "<h3 style='color:blue;'>"+str(orig["Label"])+": \""+str(orig["Value"])+"\"</h1>"
+	for param in parms:	
+		if param["Exists"] and param["Valid"]:
+			top += "<h3 style='color:blue;'>"+str(param["Label"])+": \""+str(param["Value"])+"\"</h3>"
+		else:
+			top += "<h3 style='color:red;'>"+str(param["Label"])+": Parameter missing or bad!</h3>"
+			invalidInput = True
+
+	if invalidInput:
+		top += "<h3 style='color:red;'>Invalid input! Make sure all parameters are present and correct.</h3>"
 	else:
-		top += "<h3 style='color:red;'>"+str(orig["Label"])+": Parameter missing or bad!</h1>"
-
+		conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
+		convFact = allParams["convfactor"]["Value"]
+		#if conv is actually a valid conversion
+		if conv is not None:
+			top += "<h3 style='color:blue;'>Answer: "+str(conv*convFact)+"</h3>"
+		else:
+			top += "<h3 style='color:red;'>Invalid conversion between parameters; see conversion chart for valid combinations</h3>"
 	return top+bottom
  
 		
@@ -108,10 +121,6 @@ def parseHTML(convAns):
 def main():
 	checkExist()
 	checkInput()
-	#for parName, parInfo in allParams.iteritems():
-	#	print parName, parInfo["Exists"], parInfo["Value"], parInfo["Valid"]
-	#conv = convUnits(allParams["origunits"]["Value"], allParams["convunits"]["Value"])
-	#convFact = allParams["convfactor"]["Value"]
-	print parseHTML(1)
+	print parseHTML()
 
 main()
