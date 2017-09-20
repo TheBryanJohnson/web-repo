@@ -1,11 +1,21 @@
 <!DOCTYPE html>
+<!--Created by: Bryan Johnson
+                William Miller
+Due: 9-20-17
+Purpose: Help an alien convert their units to our
+         Earth units, the "convert" button then
+         takes them to the cgi.-->
+
 <html>
 <head>
 <title>Galactic Conversion</title>
 </head>
+<!-- set up backgroun color and header -->
 <body style="background-color: #ffff99;">
 	<h1>Galactic Unit Conversion</h1>
 	<br>
+        *All units must be lowercase and singular* <br><br>
+        <!-- create a form to be handled by the CGI -->
 	<form action="do_xelk.cgi" method="GET">
 		Original Units:<br>
 		<input type="text" name="origunits"><br><br>
@@ -15,8 +25,10 @@
 		<input type="text" name="numunits"><br><br>
 		Conversion Factor:<br>
 		<input type="text" name="convfactor" value=1.0><br><br><br>
+                <!-- submit form button -->
 		<input type="submit" value="Convert"><br><br>
-                <img src="./pizza.gif"><img src="./pizza.gif"><img src="./pizza.gif"><br><br>
+                <!-- fun break before conversion chart -->
+                <img src="./pizza.gif"><img src="./pizza.gif"><img src="./pizza.gif"><br><br>                <!-- conversion chart to help alien know what he's allowed to convert to -->
                 Conversion chart<br><br>
 		1 parsec = 3.26 lightyears<br>
                 1 lightyear = 3.086 x 10^13 kilometers<br>
@@ -26,5 +38,5 @@
                 1 terrestrialyear = 525,600 terrestrialminutes<br>
 	</form>
 </body>
-<!-- -->
 </html>
+
