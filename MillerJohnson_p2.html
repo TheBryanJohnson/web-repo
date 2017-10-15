@@ -107,18 +107,19 @@ function newcard(cards) {
 }
 
 function disableNewcard() {
-	theDeck = document.getElementById("xxxx");
-	thePile = document.getElementById("yyyy");
+	theDeck = document.getElementById("deck");
+	thePile = document.getElementById("discard");
 
 	// something needs to go here.
 
 }
-function enableNewcard() {
+function drawNew() {
 	theDeck = document.getElementById("deck");
 	thePile = document.getElementById("discard");
 
 	theDeck.onclick = SelectCard;
 	thePile.onclick = SelectCard;
+	
 
 	console.log("End of enableNewcard()");
 }
@@ -142,7 +143,6 @@ function SelectCard() {
 function start() {
 	if(!named)
 		getName();
-	
 	deal();
 	enableNewcard();
 }
@@ -200,10 +200,10 @@ function deal() {
 	document.getElementById("pc3").innerHTML = mycard3;
 
 	discarded = shuffleddeck[decklocation++];
-	showpile = "<img src = '"+discarded+".png' />";
+	showpile = "<img src = './cards/"+discarded+".png' />";
 	document.getElementById("discard").innerHTML = showpile;
-	document.getElementById("discard").style.borderColor = "green";
-	document.getElementById("discard").style.borderWidth = "20px";
+	//document.getElementById("discard").style.borderColor = "green";
+	//document.getElementById("discard").style.borderWidth = "20px";
 
     // Example of changing the style (color, border width) of an element
 	document.getElementById("thePlayer").style.borderColor = "green";
@@ -231,17 +231,19 @@ function deal() {
 		<TD id="pc1"> <img src = '/~paul/cards/cardback.png' /></TD>
 		<TD id="pc2"> <img src = '/~paul/cards/cardback.png' /></TD>
 		<TD id="pc3"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="pc4"></TD>
 	</TR>
 	<TR>
 		<TH COLSPAN=2 id="theComputer"
 			style="border: 2px blue">Computer</TH>
-		<TH id="computerscore"</TH>
+		<TH id="computerscore"></TH>
 		<TH>       </TH>
 		<TH COLSPAN=2 id="thePlayer"
 			style="border: 1px solid green">PlayerName</TH>
-		<TH id="playerscore"</TH>
+		<TH id="playerscore"></TH>
 	</TR>
-<TABLE></TABLE>
+</TABLE>
+<TABLE>
 	<TR> <!-- deck/discard -->
 		<TD COLSPAN=2> 
 			<CENTER>
@@ -252,7 +254,7 @@ function deal() {
 				<TR>
 					<TD COLSPAN=2> 0 </TD>	
 				</TR>
-				<br>
+				
 			</TABLE>
 			</CENTER>
 		</TD>
