@@ -181,9 +181,9 @@ function deal() {
 //	var dlcard1 = "<img src = '/~paul/cards/"+computehand[0]+".png' />";
 
 //  card from same directory as the program/HTML/js file
-	var dlcard1 = "<img src = '"+computehand[0]+".png' />";
-	var dlcard2 = "<img src = '"+computehand[1]+".png' />";
-	var dlcard3 = "<img src = '"+computehand[2]+".png' />";
+	var dlcard1 = "<img src = './cards/"+computehand[0]+".png' />";
+	var dlcard2 = "<img src = './cards/"+computehand[1]+".png' />";
+	var dlcard3 = "<img src = './cards/"+computehand[2]+".png' />";
 //  Do not actually display cards until hand is over!
 //	document.getElementById("cc1").innerHTML = dlcard1;
 //	document.getElementById("cc2").innerHTML = dlcard2;
@@ -192,9 +192,9 @@ function deal() {
 	document.getElementById("cc2").innerHTML = hiddencard;
 	document.getElementById("cc3").innerHTML = hiddencard;
 
-	var mycard1 = "<img src = '"+playerhand[0]+".png' />";
-	var mycard2 = "<img src = '"+playerhand[1]+".png' />";
-	var mycard3 = "<img src = '"+playerhand[2]+".png' />";
+	var mycard1 = "<img src = './cards/"+playerhand[0]+".png' />";
+	var mycard2 = "<img src = './cards/"+playerhand[1]+".png' />";
+	var mycard3 = "<img src = './cards/"+playerhand[2]+".png' />";
 	document.getElementById("pc1").innerHTML = mycard1;
 	document.getElementById("pc2").innerHTML = mycard2;
 	document.getElementById("pc3").innerHTML = mycard3;
