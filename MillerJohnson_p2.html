@@ -202,19 +202,19 @@ function ignoreClick(what) {
 }
 
 function enableThrowback() {
-	for(i=0; i<4; i++) {
+	for(i=1; i<5; i++) {
 		document.getElementById("pc"+i).onclick = throwCard;
 	}
 }
 
 function disableThrowback() {
-	for(k=0; k<4; k++) {
+	for(k=1; k<5; k++) {
 		document.getElementById("pc"+k).onclick = ignoreClick("pc"+k);
 	}
 }
 
 function throwCard() {
-	
+	console.log("hete");	
 }
 
 function SelectCard() {
