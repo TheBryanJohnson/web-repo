@@ -35,6 +35,7 @@ var DIAMONDS 	= 4;
 var VALUE 		= 1;
 var SUIT 		= 2;
 var hiddencard  = "<img src = 'cardback.png' />";
+var named = false;
 // Put other global variables here ***********************
 shuffle();   // start with new deal
 // shuffle
@@ -139,10 +140,26 @@ function SelectCard() {
 // You need to finish it.
 
 function start() {
-// 
-// ask for their name....
+	if(!named)
+		getName();
+	
 	deal();
 	enableNewcard();
+}
+
+function getName() {
+	//prompt the player for a name
+	var name = prompt("Please enter your name:", "");
+	//if they cancel away, prompt once more 
+	if(name == null) {
+		name = prompt("Pretty please enter your name:", "");
+	}
+	//if they cancel away again, just set it for them
+	if(name == null) {
+		name = "He who shall not be named"
+	}			
+	document.getElementById("thePlayer").innerHTML = name;
+	named = true;
 }
 
 // deal
@@ -203,7 +220,7 @@ function deal() {
 </SCRIPT>
 
 </HEAD>
-<BODY >
+<BODY>
 <CENTER>
 <TABLE>
 	<TH STYLE="border: none; padding: 0in">
@@ -270,5 +287,8 @@ function deal() {
 	<p id="directions"> </p>
 </CENTER>
 
+<script>
+	start();
+</script>
 </BODY>
 </HTML>
