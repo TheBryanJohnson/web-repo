@@ -205,12 +205,16 @@ function deal() {
 </HEAD>
 <BODY >
 <CENTER>
-<TABLE>
-	<TH STYLE="border: none; padding: 0in">
-		<P><INPUT TYPE=BUTTON VALUE="New Game" 
-			STYLE="width: 1.20in; height: 0.4in" ONCLICK="start();"> </P>
-	</TH>
-<TABLE>
+<TABLE>	
+	<TR> <!-- Cards in play -->
+		<TD id="cc1"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="cc2"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="cc3"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="spc">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD> 
+		<TD id="pc1"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="pc2"> <img src = '/~paul/cards/cardback.png' /></TD>
+		<TD id="pc3"> <img src = '/~paul/cards/cardback.png' /></TD>
+	</TR>
 	<TR>
 		<TH COLSPAN=2 id="theComputer"
 			style="border: 2px blue">Computer</TH>
@@ -220,25 +224,18 @@ function deal() {
 			style="border: 1px solid green">PlayerName</TH>
 		<TH id="playerscore"</TH>
 	</TR>
-	<TR> <!-- Cards in play -->
-		<TD id="cc1"> <img src = '/~paul/cards/cardback.png' /></TD>
-		<TD id="cc2"> <img src = '/~paul/cards/cardback.png' /></TD>
-		<TD id="cc3"> <img src = '/~paul/cards/cardback.png' /></TD>
-		<TD id="spc"> </TD>
-		<TD id="pc1"> <img src = '/~paul/cards/cardback.png' /></TD>
-		<TD id="pc2"> <img src = '/~paul/cards/cardback.png' /></TD>
-		<TD id="pc3"> <img src = '/~paul/cards/cardback.png' /></TD>
-	</TR>
+<TABLE></TABLE>
 	<TR> <!-- deck/discard -->
 		<TD COLSPAN=2> 
 			<CENTER>
 			<TABLE>
 				<TR>
-					<TH COLSPAN=2> Hand </TH>	
+					<TH COLSPAN=2> Hand Power </TH>	
 				</TR>
 				<TR>
 					<TD COLSPAN=2> 0 </TD>	
 				</TR>
+				<br>
 			</TABLE>
 			</CENTER>
 		</TD>
@@ -247,17 +244,27 @@ function deal() {
 		<TD id="discard" > <img src = '/~paul/cards/cardback.png' /></TD>
 		<TD COLSPAN=2> 
 			<CENTER>
+			<table>
+				Deck &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dicard Pile
+			</table>
 			<TABLE>
 				<TR>
-					<TH COLSPAN=2> Games Won/Total </TH>	
+				<br>
+					<TD COLSPAN=2> Games Won: <!-- some call--> </TD>	
 				</TR>
 				<TR>
-					<TD COLSPAN=2> 0/0 </TD>	
+					<TD COLSPAN=2> Total Game: <!--some call--> /5 </TD>	
 				</TR>
 			</TABLE>
 			</CENTER>
 		</TD>
 	</TR>
+</TABLE>
+<TABLE>
+	<TH STYLE="border: none; padding: -1in">
+		<P><INPUT TYPE=BUTTON VALUE="New Game" 
+			STYLE="width: 0.85in; height: 0.35in" ONCLICK="start();"> </P>
+	</TH>
 </TABLE>
 <TABLE>
 	<TR>
