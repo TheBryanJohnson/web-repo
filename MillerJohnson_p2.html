@@ -110,6 +110,8 @@ function computescore(cards) {
 	suit1 = calculate(val1, SUIT);
 	suit2 = calculate(val2, SUIT);
 	suit3 = calculate(val2, SUIT);
+	var one_suited;
+	var match;
 	if (val1 == val2 && val2 == val3) {
 		return 50;
 	}
@@ -127,12 +129,10 @@ function computescore(cards) {
 			}
 		}
 	}
-	var one_suited;
 	else if (suit1 == suit2 && suit2 == suit3) {
 		one_suited = val1 + val2 + val3;
 		return one_suited;
 	}
-	var match;
 	else if (suit1 == suit2) {
 		match = val1 + val2;
 		if (match > val3) {
