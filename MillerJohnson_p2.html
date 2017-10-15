@@ -128,10 +128,11 @@ function disableNewcard() {
 	theDeck = document.getElementById("deck");
 	thePile = document.getElementById("discard");
 
-	// something needs to go here.
+	theDeck.onclick = ignoreClick("the deck");
+	thePile.onclick = ignoreClick("the pile");
 
 }
-function drawNew() {
+function enableNewcard() {
 	theDeck = document.getElementById("deck");
 	thePile = document.getElementById("discard");
 
@@ -146,11 +147,35 @@ function ignoreClick(what) {
 	console.log("Something clicked "+what+", ignored!");
 }
 
+function enableThrowback() {
+	for(i=0; i<4; i++) {
+		document.getElementById("pc"+i).onclick = throwCard;
+	}
+}
+
+function disableThrowback() {
+	for(k=0; k<4; k++) {
+		document.getElementById("pc"+k).onclick = ignoreClick("pc"+k);
+	}
+}
+
+function throwCard() {
+	
+}
+
 function SelectCard() {
 	console.log("beginning of SelectCard()");
 
 	var whichCard = null;
 	console.log("Hey, "+this.id+" was clicked!");
+	if(this.id == "discard") {
+		//console.log("gothere");
+		document.getElementById("pc4").innerHTML = "<img src = './cards/"+discarded+".png' />";
+		document.getElementById("discard").innerHTML = "<img src = './cards/cardback.png' />";
+		document.getElementById("directions").innerHTML = "Select a card to discard";
+		disableNewcard();
+		enableThrowback();
+	}
 	return;
 }
 
