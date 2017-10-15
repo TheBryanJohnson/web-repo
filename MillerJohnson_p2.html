@@ -104,6 +104,20 @@ function computescore(cards) {
 	//ace, 2, 3 of any suits - 40 points
 	//3, ace, 4 of any suits - 31 points
 	//X where x is the sum of cards with same suit only
+	val1 = cards[0];
+	val2 = cards[1];
+	val3 = cards[2];
+	suit1 = calculate(val1, SUIT);
+	suit2 = calculate(val2, SUIT);
+	suit3 = calculate(val2, SUIT);
+	//if val1==val2==val3
+		//return 50
+	//else if val1==1 or val2==1 or val3==1
+		//if val1==2 or val2==2 or val3==2
+			//if val1==3 or val2==3 or val3==3
+				//return 40
+	//etc
+
 }
 
 function newcard(cards) {
