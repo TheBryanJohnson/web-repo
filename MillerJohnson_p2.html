@@ -110,13 +110,67 @@ function computescore(cards) {
 	suit1 = calculate(val1, SUIT);
 	suit2 = calculate(val2, SUIT);
 	suit3 = calculate(val2, SUIT);
-	//if val1==val2==val3
-		//return 50
-	//else if val1==1 or val2==1 or val3==1
-		//if val1==2 or val2==2 or val3==2
-			//if val1==3 or val2==3 or val3==3
-				//return 40
-	//etc
+	if (val1 == val2 && val2 == val3) {
+		return 50;
+	}
+	else if (val1 == 1 || val2 == 1 || val3 == 1) {
+		if (val1 == 2 || val2 == 2 || val3 == 2) {
+			if (val1 == 3 || val2 == 3 || val3 == 3) {
+				return 40;
+			}
+		}
+	}
+	else if (val1 == 3 || val2 == 3 || val3 == 3) {
+		if (val1 == 1 || val2 == 1 || val3 == 1) {
+			if (val1 == 4 || val2 == 4 || val3 == 4) {
+				return 31;
+			}
+		}
+	}
+	var one_suited;
+	else if (suit1 == suit2 && suit2 == suit3) {
+		one_suited = val1 + val2 + val3;
+		return one_suited;
+	}
+	var match;
+	else if (suit1 == suit2) {
+		match = val1 + val2;
+		if (match > val3) {
+			return match;
+		}
+		else {
+			return val3;
+		}
+	}
+	else if (suit2 == suit3) {
+		match = val2 + val3;
+		if (match > val1) {
+			return match;
+		}
+		else {
+			return val1;
+		}
+	}
+	else if (suit1 == suit3) {
+		match = val1 + val3;
+		if (match > val2) {
+			return match;
+		}
+		else {
+			return val2;
+		}
+	}
+	else if (suit1 != suit2 && suit2 != suit3) {
+		if (val1 > val2 && val1 > val3) {
+			return val1;
+		}
+		else if (val2 > val1 && val2 > val3) {
+			return val2;
+		}
+		else if (val3> val1  && val3 > val2) {
+			return val3;
+		}
+	}
 
 }
 
