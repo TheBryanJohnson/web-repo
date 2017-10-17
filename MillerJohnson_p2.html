@@ -39,15 +39,80 @@ var hiddencard  = "<img src = './cards/cardback.png' />";
 var named = false;
 var handNum = 1;
 var gameNum = 1;
+var Pname;
+/*Starting function for the game.
+* Preconditions: called when the page is opened or 
+*   at the end of handComplete(). 
+* Postconditions:
+*	-Assigns user a name for the game.
+*   -Shuffles the deck per shuffle() function.
+*   -Disables the deal button.
+*   -Enables the user to select from the discard pile or the deck.
+*	-Removes hand score from the DOM if present.
+*/
+function start() {
+	if(!named)
+		getName();
+	shuffle();
+	deal();
+	document.getElementById("dealbtn").disabled = true;
+	enableNewcard();
+	document.getElementById("playerscore").innerHTML = "";
+	document.getElementById("computerscore").innerHTML = "";
+	document.getElementById("winner").innerHTML = "";
+	document.getElementById("hNum").innerHTML = 1;
+}
 
-// shuffle
-// This is one way to create a shuffled deck
-// reshuffle the cards, put in card array
-// Preconditions:
-//	New Deal button pressed
-// Postconditions:
-//	Card array filled and shuffled
+/*Starting function for the game specifically for use with the
+* "New Game" button.
+*  Exactly the same as start(), except resets globals to starting values.
+*/
+function startNew() {
+	shuffle();
+	handNum=1;
+	gameNum=1;
+	document.getElementById("gameslost").innerHTML = 0;
+	document.getElementById("gameswon").innerHTML = 0;	
+	document.getElementById("totalgames").innerHTML = 0;
+	document.getElementById("dealbtn").disabled = true;
+	document.getElementById("pc4").innerHTML="";
+	//document.getElementById
+	deal();
+	document.getElementById("newGameBtn").disabled = true;
+	document.getElementById("winner").innerHTML = "";
+	document.getElementById("playerscore").innerHTML = "";
+	document.getElementById("computerscore").innerHTML = "";
+	document.getElementById("hNum").innerHTML = 1;
+	enableNewcard();
+}
 
+/*Prompts the user for a name. Uses the JS prompt function.
+*/
+function getName() {
+	//prompt the player for a name
+	var name = prompt("Please enter your name:", "");
+	//if they cancel away, prompt once more 
+	if(name == null) {
+		name = prompt("Pretty please enter your name:", "");
+	}
+	//if they cancel away again, just set it for them
+	if(name == null) {
+		name = "He/She who shall not be named"
+	}
+	if(name.length > 30) {
+		name=name.substring(0,20);
+	}			
+	document.getElementById("thePlayer").innerHTML = name;
+	pName = name;
+	named = true;
+}
+
+/*Randomly shuffles the 40 cards in the deck.
+* Preconditions:
+*   -Called at start of a game or hand.
+* Postcontitions:
+*	-shuffles the deck in the shuffleddeck[] global.
+*/
 function shuffle() {  
 	// cardstart is unshuffled 1,2,3....
 	// card 1 is ace of clubs (1.png)
@@ -80,15 +145,14 @@ function shuffle() {
 
 }
 
-// calculate
-// calculate value of card
-// Preconditions:
-//	Card passed
-//	1 <= card <= DSIZE
-//  valueorsuit
-// Postconditions:
-//	Card value returned
-
+/*Calculates the value or suit of a given card.
+* Params:
+*	the_card: numerical value of a particular card in the shuffleddeck[].
+*	valueorsuit: pass in 1 to retrieve the value, pass in 2 for the suit
+*	  (or use the globals, VALUE and SUIT).
+* Preconditions: n/a
+* Postconditions: returns the value or suit of the input card.
+*/
 function calculate(the_card, valueorsuit) {
 var value; // numerical value of card
 var suit;
@@ -112,8 +176,14 @@ var suit;
 	}
 }
 
+/*Computes a score for a particular hand.
+* Params:
+*	cards: three-value integer array with three valid cards.
+* Postconditions:
+*	returns the score of the input cards as described in function.
+*/
+
 function computescore(cards) {
-//	alert("computescore called");  // replace with actual code for computescore
 	//3 of a kind - any 3 cards with same value - 50 points
 	//ace, 2, 3 of any suits - 40 points
 	//3, ace, 4 of any suits - 31 points
@@ -127,10 +197,11 @@ function computescore(cards) {
 	var one_suited;
 	var match;
 
-
+	//case 1
 	if (val1 == val2 && val2 == val3) {
 		return 50;
 	}
+	//case 2
 	if (val1 == 1 || val2 == 1 || val3 == 1) {
 		if (val1 == 2 || val2 == 2 || val3 == 2) {
 			if (val1 == 3 || val2 == 3 || val3 == 3) {
@@ -138,6 +209,7 @@ function computescore(cards) {
 			}
 		}
 	}
+	//case 3
 	if (val1 == 3 || val2 == 3 || val3 == 3) {
 		if (val1 == 1 || val2 == 1 || val3 == 1) {
 			if (val1 == 4 || val2 == 4 || val3 == 4) {
@@ -145,10 +217,12 @@ function computescore(cards) {
 			}
 		}
 	}
+	//All suits are the same color
 	if (suit1 == suit2 && suit2 == suit3) {
 		one_suited = val1 + val2 + val3;
 		return one_suited;
 	}
+
 	if (suit1 == suit2) {
 		match = val1 + val2;
 		if (match > val3) {
@@ -176,29 +250,31 @@ function computescore(cards) {
 			return val2;
 		}
 	}
+	//if no suits match
 	if (suit1 != suit2 && suit2 != suit3) {
-		if (val1 > val2 && val1 > val3) {
+		if (val1 >= val2 && val1 >= val3) {
 			return val1;
 		}
-		else if (val2 > val1 && val2 > val3) {
+		else if (val2 >= val1 && val2 >= val3) {
 			return val2;
 		}
-		else if (val3> val1  && val3 > val2) {
+		else if (val3 >= val1  && val3 >= val2) {
 			return val3;
-		} //err if vals are equal
+		}
 	}
 
 }
 
-
+//Disables picking up a new card for the player
 function disableNewcard() {
 	theDeck = document.getElementById("deck");
 	thePile = document.getElementById("discard");
 
 	theDeck.onclick = ignoreClick("the deck");
 	thePile.onclick = ignoreClick("the pile");
-
 }
+
+//Enables picking up a new card for the player
 function enableNewcard() {
 	theDeck = document.getElementById("deck");
 	thePile = document.getElementById("discard");
@@ -206,32 +282,42 @@ function enableNewcard() {
 	theDeck.onclick = SelectCard;
 	thePile.onclick = SelectCard;
 	
-
-	console.log("End of enableNewcard()");
 }
 
+//ignore a click
+//used for diagnostics
 function ignoreClick(what) {
-	console.log("Something clicked "+what+", ignored!");
+	//console.log("Something clicked "+what+", ignored!");
+	return;
 }
 
+//Enable the player to discard a card
 function enableThrowback() {
+
 	for(i=1; i<playerhand.length+2; i++) {
-		document.getElementById("pc"+i).onclick = throwCard;
+		document.getElementById("pc"+i).onclick = startDiscard;
 	}
 }
 
+//Disallow the player to discard a card
 function disableThrowback() {
 	for(k=1; k<playerhand.length+2; k++) {
 		document.getElementById("pc"+k).onclick = ignoreClick("pc"+k);
 	}
 }
 
-function throwCard() {
-	var cardNum = this.innerHTML;
+//Take a particular card a player has clicked and discard it
+function throwCard(crd) {
+	var cardNum = crd.innerHTML;
 	cardNum=cardNum.substring(cardNum.indexOf("/")+1,cardNum.indexOf(".png"));
 	discarded = cardNum;
 	updateDiscard(discarded);
-	document.getElementById(this.id).innerHTML = document.getElementById("pc4").innerHTML;
+	
+	var pcFourVal = document.getElementById("pc4").innerHTML;
+	pcFourVal=pcFourVal.substring(pcFourVal.indexOf("/")+1,pcFourVal.indexOf(".png"));
+
+	document.getElementById("pc"+crd.id.substring(2)).innerHTML = "<img id=pci"+crd.id.substring(2)+" src = 'cards/"+pcFourVal+".png' />";
+	
 	for(p=1; p<4; p++) {
 		tmp = "pc"+p;
 		cardid = document.getElementById(tmp).innerHTML;
@@ -244,6 +330,8 @@ function throwCard() {
 	handComplete();
 }
 
+//Once a hand is complete, increment any globals that need it, update the scoreboard,
+//run through the next hand or game
 function handComplete() {
 	handNum++;
 	if(handNum > 3) {
@@ -265,16 +353,19 @@ function handComplete() {
 		handNum = 1;
 		if(compScore > playScore) {
 			document.getElementById("gameslost").innerHTML = parseInt(document.getElementById("gameslost").innerHTML)+1;
+			document.getElementById("winner").innerHTML = "<h3>Computer won the game</h3>";
 		}
 		else if(playScore >= compScore) {
 			document.getElementById("gameswon").innerHTML = parseInt(document.getElementById("gameswon").innerHTML)+1;
+			document.getElementById("winner").innerHTML = "<h3>"+pName+" won the game</h3>";
 		}
 		document.getElementById("totalgames").innerHTML = parseInt(document.getElementById("totalgames").innerHTML)+1;
 		document.getElementById("directions").innerHTML = "Press Deal to continue the game";
 
 
 		if(gameNum > 5) {
-			document.getElementById("directions").innerHTML = "The game has finished, click newgame to play again.";
+			document.getElementById("directions").innerHTML = "The game has finished, click on New Game to play again.";
+			document.getElementById("newGameBtn").disabled = false;
 			return;
 		}
 		else {
@@ -285,13 +376,117 @@ function handComplete() {
 	}
 	else {
 		document.getElementById("directions").innerHTML = "Select a new/discarded card";
+		document.getElementById("hNum").innerHTML = parseInt(document.getElementById("hNum").innerHTML)+1;
 		enableNewcard();
 	}
 
 }
 
+//update the discard pile with a passed-in card (num)
+function updateDiscard(num) {
+	document.getElementById("discard").innerHTML = "<img src = 'cards/"+num+".png' />";
+}
+
+//Put a card from the discard or deck into the player's hand, depending on what's clicked (this.id)
+function SelectCard() {
+	//console.log("beginning of SelectCard()");
+	//console.log("Hey, "+this.id+" was clicked!");
+
+	//drew from discard
+	if(this.id == "discard") {
+		document.getElementById("pc4").innerHTML = "<img id='pci4' src = 'cards/"+discarded+".png' />";
+		document.getElementById("discard").innerHTML = "<img src = 'cards/cardback.png' />";
+	}
+	//drew from deck
+	else {
+		document.getElementById("pc4").innerHTML = "<img id='pci4' src = 'cards/"+shuffleddeck[decklocation++]+".png' />";
+	}
+	//put up a green border on all player cards
+	for(x=1; x<playerhand.length+2; x++) {
+		document.getElementById("pci"+x).style.borderColor = "green";
+		document.getElementById("pci"+x).border = "5px";
+	}
+	disableNewcard();
+	enableThrowback();
+	document.getElementById("directions").innerHTML = "Select a card to discard";
+}
 
 
+function startDiscard() {
+	for(x=1; x<playerhand.length+2; x++) {
+		document.getElementById("pci"+x).style.borderColor = "green";
+		document.getElementById("pci"+x).border = "0px";
+	}
+	document.getElementById("pci"+this.id.substring(this.id.length-1, this.id.length)).style.borderColor = "red";
+	document.getElementById("pci"+this.id.substring(this.id.length-1, this.id.length)).border = "5px";
+
+	document.getElementById("directions").innerHTML = "<h2>Click here to discard!</h2>";
+	if(this.id=="pc1")
+		document.getElementById("directions").onclick = function(){throwCard(document.getElementById("pc1"));};
+	else if(this.id=="pc2")
+		document.getElementById("directions").onclick = function(){throwCard(document.getElementById("pc2"));};
+	else if(this.id=="pc3")
+		document.getElementById("directions").onclick = function(){throwCard(document.getElementById("pc3"));};
+	else if(this.id=="pc4")
+		document.getElementById("directions").onclick = function(){throwCard(document.getElementById("pc4"));};
+}
+
+//Deals random cards to the computer and the player and uptdates the ui
+function deal() {
+	// deal cards and display data
+	dealpressed = 1; // deal button has been pressed
+	// draw three cards for each player
+	
+	
+	computerhand[0] = shuffleddeck[decklocation++];
+	computerhand[1] = shuffleddeck[decklocation++];
+	computerhand[2] = shuffleddeck[decklocation++];
+
+	playerhand[0]  = shuffleddeck[decklocation++];
+	playerhand[1]  = shuffleddeck[decklocation++];
+	playerhand[2]  = shuffleddeck[decklocation++];
+	
+
+	discarded = shuffleddeck[decklocation++];
+	updateDiscard(discarded);
+
+
+	var cardback = "./cards/cardback.png";
+
+//  card from same directory as the program/HTML/js file
+	var dlcard1 = "<img src = 'cards/"+computerhand[0]+".png' />";
+	var dlcard2 = "<img src = 'cards/"+computerhand[1]+".png' />";
+	var dlcard3 = "<img src = 'cards/"+computerhand[2]+".png' />";
+//  Do not actually display cards until hand is over!
+//	document.getElementById("cc1").innerHTML = dlcard1;
+//	document.getElementById("cc2").innerHTML = dlcard2;
+//	document.getElementById("cc3").innerHTML = dlcard3;
+	document.getElementById("cc1").innerHTML = hiddencard;
+	document.getElementById("cc2").innerHTML = hiddencard;
+	document.getElementById("cc3").innerHTML = hiddencard;
+
+	var mycard1 = "<img id='pci1' src = 'cards/"+playerhand[0]+".png' />";
+	var mycard2 = "<img id='pci2' src = 'cards/"+playerhand[1]+".png' />";
+	var mycard3 = "<img id='pci3' src = 'cards/"+playerhand[2]+".png' />";
+	document.getElementById("pc1").innerHTML = mycard1;
+	document.getElementById("pc2").innerHTML = mycard2;
+	document.getElementById("pc3").innerHTML = mycard3;
+
+
+    // Example of changing the style (color, border width) of an element
+	//document.getElementById("pci1").style.borderColor = "green";
+	//document.getElementById("pci1").border = "5";
+
+    // Example how to display on screen in textboxes
+	//document.getElementById("computerscore").innerHTML ="1";
+	//document.getElementById("playerscore").innerHTML ="2";
+	
+	document.getElementById("directions").innerHTML =
+			"Select a new/discarded card";
+	//printCompHand("initial hand")
+}
+
+//Takes the computer's turn
 function computerTurn() {
 	var suits = [];
 	var vals = [];
@@ -359,9 +554,7 @@ function computerTurn() {
 					//if needed suit matches discard, swap it with the card that doens't have the right suit
 					if(suits[x] == calculate(discarded, 2)) {
 						var z = x+y;
-						if(z==1) z=2;
-						else if(z==2) z=1;
-						else if(z==3) z=0;
+						z = calcZ(z)
 						var origVal = computerhand[z];
 						computerhand[z] = discarded;
 						discarded = origVal;
@@ -373,9 +566,7 @@ function computerTurn() {
 						newcard = shuffleddeck[decklocation++];
 						if(suits[x] == calculate(newcard, 2)) {
 							var z = x+y;
-							if(z==1) z=2;
-							else if(z==2) z=1;
-							else if(z==3) z=0;
+							z = calcZ(z);
 							discarded = computerhand[z];
 							computerhand[z] = newcard;
 							updateDiscard(discarded);
@@ -403,9 +594,7 @@ function computerTurn() {
 					//if needed suit matches discard, swap it with the card that doens't have the right value
 					if(vals[x] == calculate(discarded, 1)) {
 						var z = x+y;
-						if(z==1) z=2;
-						else if(z==2) z=1;
-						else if(z==3) z=0;
+						z = calcZ(z);
 						var origVal = computerhand[z];
 						computerhand[z] = discarded;
 						discarded = origVal;
@@ -417,9 +606,7 @@ function computerTurn() {
 						newcard = shuffleddeck[decklocation++];
 						if(vals[x] == calculate(newcard, 1)) {
 							var z = x+y;
-							if(z==1) z=2;
-							else if(z==2) z=1;
-							else if(z==3) z=0;
+							z = calcZ(z);
 							discarded = computerhand[z];
 							computerhand[z] = newcard;
 							updateDiscard(discarded);
@@ -640,7 +827,16 @@ function computerTurn() {
 
 } //end of function
 
-
+//Helper function for computerTurn()
+//When this is used there is a loop inside of a loop to compare all the cards in a hand
+//If a certian condition is met when comparing two cards, you need the index of the third card to perform swaps
+//To avoid several if-comparisons between the array indices, this method just takes the sum of the two loop
+//indices and returns the last index
+//index+index=uniqueVal
+//0+1 = 1  [Meaning that index 2 is needed]
+//0+2 = 2  [index 1 is needed]
+//1+2 = 3  [index 0]
+//In hindsight just sorting the cards on the spot would have probably been much easier 
 function calcZ(num) {
 	switch(num) {
 		case 1:
@@ -655,123 +851,8 @@ function calcZ(num) {
 	}
 }
 
-function updateDiscard(num) {
-	document.getElementById("discard").innerHTML = "<img src = 'cards/"+num+".png' />";
-}
 
-function SelectCard() {
-	console.log("beginning of SelectCard()");
-	console.log("Hey, "+this.id+" was clicked!");
-
-	//drew from discard
-	if(this.id == "discard") {
-		document.getElementById("pc4").innerHTML = "<img src = 'cards/"+discarded+".png' />";
-		document.getElementById("discard").innerHTML = "<img src = 'cards/cardback.png' />";
-	}
-	//drew from deck
-	else {
-		document.getElementById("pc4").innerHTML = "<img src = 'cards/"+shuffleddeck[decklocation++]+".png' />";
-	}
-	disableNewcard();
-	enableThrowback();
-	document.getElementById("directions").innerHTML = "Select a card to discard";
-}
-
-// Main function.  It should follow the steps in the requirements.
-// RIGHT NOW, it only deals cards as an example.
-// You need to finish it.
-
-function start() {
-	if(!named)
-		getName();
-	shuffle();
-	deal();
-	document.getElementById("dealbtn").disabled = true;
-	enableNewcard();
-}
-
-function startNew() {
-	shuffle();
-	document.getElementById("gameslost").innerHTML = 0;
-	document.getElementById("gameswon").innerHTML = 0;	
-	document.getElementById("totalgames").innerHTML = 0;
-	document.getElementById("dealbtn").disabled = true;
-	deal();
-	enableNewcard();
-
-}
-
-function getName() {
-	//prompt the player for a name
-	var name = prompt("Please enter your name:", "");
-	//if they cancel away, prompt once more 
-	if(name == null) {
-		name = prompt("Pretty please enter your name:", "");
-	}
-	//if they cancel away again, just set it for them
-	if(name == null) {
-		name = "He who shall not be named"
-	}			
-	document.getElementById("thePlayer").innerHTML = name;
-	named = true;
-}
-
-// deal
-// start by dealing 3 cards to computer and you
-function deal() {
-	// deal cards and display data
-	dealpressed = 1; // deal button has been pressed
-	// draw three cards for each player
-	
-	
-	computerhand[0] = shuffleddeck[decklocation++];
-	computerhand[1] = shuffleddeck[decklocation++];
-	computerhand[2] = shuffleddeck[decklocation++];
-
-	playerhand[0]  = shuffleddeck[decklocation++];
-	playerhand[1]  = shuffleddeck[decklocation++];
-	playerhand[2]  = shuffleddeck[decklocation++];
-	
-
-	discarded = shuffleddeck[decklocation++];
-	updateDiscard(discarded);
-
-
-	var cardback = "./cards/cardback.png";
-
-//  card from same directory as the program/HTML/js file
-	var dlcard1 = "<img src = 'cards/"+computerhand[0]+".png' />";
-	var dlcard2 = "<img src = 'cards/"+computerhand[1]+".png' />";
-	var dlcard3 = "<img src = 'cards/"+computerhand[2]+".png' />";
-//  Do not actually display cards until hand is over!
-//	document.getElementById("cc1").innerHTML = dlcard1;
-//	document.getElementById("cc2").innerHTML = dlcard2;
-//	document.getElementById("cc3").innerHTML = dlcard3;
-	document.getElementById("cc1").innerHTML = hiddencard;
-	document.getElementById("cc2").innerHTML = hiddencard;
-	document.getElementById("cc3").innerHTML = hiddencard;
-
-	var mycard1 = "<img src = 'cards/"+playerhand[0]+".png' />";
-	var mycard2 = "<img src = 'cards/"+playerhand[1]+".png' />";
-	var mycard3 = "<img src = 'cards/"+playerhand[2]+".png' />";
-	document.getElementById("pc1").innerHTML = mycard1;
-	document.getElementById("pc2").innerHTML = mycard2;
-	document.getElementById("pc3").innerHTML = mycard3;
-
-
-    // Example of changing the style (color, border width) of an element
-	//document.getElementById("thePlayer").style.borderColor = "green";
-	//document.getElementById("thePlayer").style.borderWidth = "5px";
-
-    // Example how to display on screen in textboxes
-	//document.getElementById("computerscore").innerHTML ="1";
-	//document.getElementById("playerscore").innerHTML ="2";
-	
-	document.getElementById("directions").innerHTML =
-			"Select a new/discarded card";
-	//printCompHand("initial hand")
-}
-
+//Diagnostic function, print the computer's hand with a message
 function printCompHand(msg) {
 	console.log("------Computer hand------");
 	console.log(msg);
@@ -816,7 +897,7 @@ function printCompHand(msg) {
 					<TH COLSPAN=2> Hand Number </TH>	
 				</TR>
 				<TR>
-					<TD COLSPAN=2> 0/3 </TD> <!--add real code-->	
+					<TD COLSPAN=2> <a id="hNum">1</a>/3 </TD>
 				</TR>
 				
 			</TABLE>
@@ -850,8 +931,8 @@ function printCompHand(msg) {
 </TABLE>
 <TABLE>
 	<TH STYLE="border: none; padding: -1in">
-		<P><INPUT TYPE=BUTTON VALUE="New Game" 
-			STYLE="width: 0.85in; height: 0.35in" ONCLICK="startNew();"> </P>
+		<P><INPUT ID="newGameBtn" TYPE=BUTTON VALUE="New Game" 
+			STYLE="width: 0.85in; height: 0.35in" ONCLICK="startNew()" DISABLED="true"> </P>
 		<P><INPUT ID="dealbtn" TYPE=BUTTON VALUE="Deal" 
 			STYLE="width: 0.85in; height: 0.35in" ONCLICK="start()"> </P>
 	</TH>
@@ -865,6 +946,7 @@ function printCompHand(msg) {
 	</TR>
 </TABLE>
 	<p id="directions"> </p>
+	<p id="winner"></p>
 </CENTER>
 
 <script>
