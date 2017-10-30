@@ -34,21 +34,32 @@ function giveFile(filename, response) {
 	if(fs.existsSync('./'+filename)) {
 		fs.readFile('./'+filename, (err, data) => {
 			if (err) {
+				console.log("setheaderErr");
 				response.statusCode = 403;
 				response.setHeader('Content-Type', 'text/html');
-				response.write("<h3>File not found!</h3>");
+				response.end("<h3>Unidentified error in reading file</h3>");
 			}
 			else {
 				//serve file
-				fs.open('./'+filename, 'r', (err, fd) => {
-					if (err) {
-						console.log("problem in serving");
-					}
-				});
+				response.statusCode = 200;
+				//mp3
+				if(filename.substring(filename.length-1, filename.length) == "3") {
+					console.log("setHeaderMP3");
+					response.setHeader('Content-Type', 'audio/mpeg3');
+					response.end(data, 'binary');
+				}
+				//jpg
+				else {
+					console.log("setHeaderJPG");
+					response.setHeader('Content-Type', 'image/jpeg');
+					response.end(data, 'binary');
+				}
 			}
 		});
 	}
 	else {
+		console.log("setHeader404");
+		response.setHeader('Content-Type', 'text/html');
 		response.write("<h3>File doesn't exist!</h3>");
 	}
 }
@@ -77,9 +88,9 @@ function start() {
 		var givenURL = request.url;
 		//substring out the /
 		givenURL = givenURL.substring(1, givenURL.length);
-		//response.setHeader('Content-Type', 'text/html;');
 		fileName = validateFilename(givenURL);
 		if(fileName === false) {
+			console.log("setHeaderBadName");
 			response.statusCode = 403;
 			response.setHeader('Content-Type', 'text/html;');
 			response.write("<h3>Invalid file name!</h3>");
@@ -87,9 +98,6 @@ function start() {
 		else {
 			giveFile(fileName, response);
 		}
-		//temporary
-		//console.log("A request for ["+fileName+"] was made.");
-		response.end('You requested the following file: '+fileName+'\n');
 	});
 
 	server.listen(port, HOSTNAME, function() {
