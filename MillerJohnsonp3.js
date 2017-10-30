@@ -89,7 +89,7 @@ function start() {
 		}
 		//temporary
 		//console.log("A request for ["+fileName+"] was made.");
-		//response.end('You requested the following file: '+fileName+'\n');
+		response.end('You requested the following file: '+fileName+'\n');
 	});
 
 	server.listen(port, HOSTNAME, function() {
