@@ -34,7 +34,7 @@ function giveFile(filename, response) {
 	if(fs.existsSync('./'+filename)) {
 		fs.readFile('./'+filename, (err, data) => {
 			if (err) {
-				console.log("setheaderErr");
+				//console.log("setheaderErr");
 				response.statusCode = 403;
 				response.setHeader('Content-Type', 'text/html');
 				response.end("<h3>Unidentified error in reading file</h3>");
@@ -44,23 +44,25 @@ function giveFile(filename, response) {
 				response.statusCode = 200;
 				//mp3
 				if(filename.substring(filename.length-1, filename.length) == "3") {
-					console.log("setHeaderMP3");
+					//console.log("setHeaderMP3");
 					response.setHeader('Content-Type', 'audio/mpeg3');
 					response.end(data, 'binary');
 				}
 				//jpg
 				else {
-					console.log("setHeaderJPG");
-					response.setHeader('Content-Type', 'image/jpeg');
-					response.end(data, 'binary');
+					//console.log("setHeaderJPG");
+					//response.setHeader('Content-Type', 'image/jpeg');
+					//response.end(data, 'binary');
+					response.setHeader('Content-disposition', 'attachment; filename='+filename);
+					response.end(data);
 				}
 			}
 		});
 	}
 	else {
-		console.log("setHeader404");
+		//console.log("setHeader404");
 		response.setHeader('Content-Type', 'text/html');
-		response.write("<h3>File doesn't exist!</h3>");
+		response.end("<h3>File doesn't exist!</h3>");
 	}
 }
 
@@ -79,7 +81,7 @@ function validateFilename(fileName) {
 }
 
 function start() {
-	//based on/borrowed from:
+	//random port based on/borrowed from:
 	//https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
 	var port;
 	if(STARTPORT == ENDPORT) port = STARTPORT;
@@ -90,10 +92,10 @@ function start() {
 		givenURL = givenURL.substring(1, givenURL.length);
 		fileName = validateFilename(givenURL);
 		if(fileName === false) {
-			console.log("setHeaderBadName");
+			//console.log("setHeaderBadName");
 			response.statusCode = 403;
 			response.setHeader('Content-Type', 'text/html;');
-			response.write("<h3>Invalid file name!</h3>");
+			response.end("<h3>Invalid file name!</h3>");
 		}
 		else {
 			giveFile(fileName, response);
