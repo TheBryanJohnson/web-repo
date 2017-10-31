@@ -2,6 +2,7 @@
 * Authors: William Miller, Bryan Johnson
 * Purpose:
 *  Create a music-distributing server software using the NodeJS runtime.
+*  Put all MP3s and JPGs in the same directory as this file
 */
 
 //needed libraries
@@ -34,7 +35,7 @@ function giveAdvert() {
 	}
 	return false;
 }
-
+//if available gives filename as response
 function giveFile(filename, response) {
 	if(fs.existsSync('./'+filename)) {
 		if (giveAdvert()) {
@@ -95,7 +96,7 @@ function validateFilename(fileName) {
 	//console.log(fileName+" comes up as false");
 	return false;
 }
-
+//sartup function
 function start() {
 	//random port based on/borrowed from:
 	//https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
