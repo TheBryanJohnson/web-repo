@@ -22,6 +22,7 @@ var ADVERT_RATE = 33;
 function giveAdvert() {
 	//random number between 0 and 99
 	var num = Math.floor(Math.random() * 100);
+	console.log(num);
 	//Return an advert if needed
 	if(num < ADVERT_RATE) {
 		//show advert
@@ -32,32 +33,43 @@ function giveAdvert() {
 
 function giveFile(filename, response) {
 	if(fs.existsSync('./'+filename)) {
-		fs.readFile('./'+filename, (err, data) => {
-			if (err) {
-				//console.log("setheaderErr");
-				response.statusCode = 403;
-				response.setHeader('Content-Type', 'text/html');
-				response.end("<h3>Unidentified error in reading file</h3>");
-			}
-			else {
-				//serve file
+		if (giveAdvert()) {
+			fs.readFile('./advert.jpg', (err, data) => {
 				response.statusCode = 200;
-				//mp3
-				if(filename.substring(filename.length-1, filename.length) == "3") {
-					//console.log("setHeaderMP3");
-					response.setHeader('Content-Type', 'audio/mpeg3');
-					response.end(data, 'binary');
+				response.setHeader('Content-disposition', 'attachment; filename=advert.jpg');
+				response.end(data);
+	
+			});
+		}
+		else {
+			fs.readFile('./'+filename, (err, data) => {
+			
+				if (err) {
+					//console.log("setheaderErr");
+					response.statusCode = 403;
+					response.setHeader('Content-Type', 'text/html');
+					response.end("<h3>Unidentified error in reading file</h3>");
 				}
-				//jpg
 				else {
-					//console.log("setHeaderJPG");
-					//response.setHeader('Content-Type', 'image/jpeg');
-					//response.end(data, 'binary');
-					response.setHeader('Content-disposition', 'attachment; filename='+filename);
-					response.end(data);
+					//serve file
+					response.statusCode = 200;
+					//mp3
+					if(filename.substring(filename.length-1, filename.length) == "3") {
+						//console.log("setHeaderMP3");
+						response.setHeader('Content-Type', 'audio/mpeg3');
+						response.end(data, 'binary');
+					}
+					//jpg
+					else {
+						//console.log("setHeaderJPG");
+						//response.setHeader('Content-Type', 'image/jpeg');
+						//response.end(data, 'binary');
+						response.setHeader('Content-disposition', 'attachment; filename='+filename);
+						response.end(data);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	else {
 		//console.log("setHeader404");
