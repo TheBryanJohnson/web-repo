@@ -90,7 +90,6 @@ function validateFilename(fileName) {
 	var regx2 = new RegExp("[a-zA-Z0-9_]+.jpg$");
 	console.log("a request for ["+fileName+"] was made");
 	if((fileName.match(regx1) && fileName.match(regx1).index == 0) || (fileName.match(regx2) && fileName.match(regx2).index == 0)) {
-		console.log(fileName.match(regx1).index);
 		return fileName;
 	}
 	//console.log(fileName+" comes up as false");
@@ -102,7 +101,7 @@ function start() {
 	//https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
 	var port;
 	if(STARTPORT == ENDPORT) port = STARTPORT;
-	else port = Math.floor(Math.random()*ENDPORT-STARTPORT+1)+STARTPORT;
+	else port = Math.floor(Math.random()*(ENDPORT-STARTPORT+1)+STARTPORT);
 	var server = http.createServer(function(request, response) {
 		var givenURL = request.url;
 		//substring out the /
