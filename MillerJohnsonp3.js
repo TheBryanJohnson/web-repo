@@ -9,8 +9,8 @@ var http = require("http"),
     url =  require('url');
 const fs = require('fs');
 
-var STARTPORT = 6660;
-var ENDPORT = 6660;
+var STARTPORT = 2000;
+var ENDPORT = 30000;
 var HOSTNAME = 'iris.cs.engr.uky.edu';
 //rate of advertisements as a percentage, ints only
 var ADVERT_RATE = 33;
@@ -20,9 +20,13 @@ var ADVERT_RATE = 33;
 //Boolean, checks if an advert should be distributed.
 //True if an advert should be distributed, false otherwise.
 function giveAdvert() {
+	if(!fs.existsSync('./advert.jpg')) {
+		console.log("advert.jpg is missing! And you're missing out on that advertising $$$");
+		return false;
+	}
 	//random number between 0 and 99
 	var num = Math.floor(Math.random() * 100);
-	console.log(num);
+	//console.log(num);
 	//Return an advert if needed
 	if(num < ADVERT_RATE) {
 		//show advert
@@ -82,10 +86,11 @@ function giveFile(filename, response) {
 //Returns false if name is not valid.
 //Returns a string with the filename if name is valid.
 function validateFilename(fileName) {
-	var regx1 = new RegExp("[0-9a-zA-z_]+.mp3$");
-	var regx2 = new RegExp("[0-9a-zA-z_]+.jpg$");
+	var regx1 = new RegExp("[a-zA-Z0-9_]+.mp3$");
+	var regx2 = new RegExp("[a-zA-Z0-9_]+.jpg$");
 	console.log("a request for ["+fileName+"] was made");
-	if(regx1.test(fileName)||regx2.test(fileName)) {
+	if((fileName.match(regx1) && fileName.match(regx1).index == 0) || (fileName.match(regx2) && fileName.match(regx2).index == 0)) {
+		console.log(fileName.match(regx1).index);
 		return fileName;
 	}
 	//console.log(fileName+" comes up as false");
