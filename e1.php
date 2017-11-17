@@ -34,12 +34,22 @@ function display_form() {
 ?>
 	<form action="e1.php" method="get">
 		Title:
-		<input type='number' name='title'><br><br>
+		<select name='title'><br><br>
+			<option value = "">Select...</option>
+			<option value = "idk what this is">Sport</option>
+		</select>
+		&nbsp;&nbsp;&nbsp;
 		Results:
-		<input type='number' name='results'><br><br>
+		<select name='results'><br><br>
+			<option value = "">Select...</option>
+		</select>
+		&nbsp;&nbsp;&nbsp;
 		Search Term:
-		<input type='text' name='searchTerm'><br><br>
-		<input type='submit' value='Pls'>
+		<select name='searchTerm'><br><br>
+			<option value = "">Select...</option>
+		</select>
+		&nbsp;&nbsp;&nbsp;
+		<input type='submit' value='SEND IT'>
 	</form>
 <?php
 	end_html();
