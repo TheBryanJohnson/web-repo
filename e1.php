@@ -24,7 +24,7 @@ function process_form() {
 	$results = $_GET['results'];
 	$searchTerm = $_GET['searchTerm'];
 	
-	echo showResults($searchTerm);
+	showResults($searchTerm);
 
 	end_html();
 }
@@ -47,9 +47,25 @@ function display_form() {
 
 function showResults($fileName) {
 	if(!file_exists($fileName)) {
+		echo "File not found!";
 		return false;
 	}
-	return "yes";
+
+	$allData = json_decode(file_get_contents($fileName), true);
+
+	if($allData == NULL || json_last_error() != JSON_ERROR_NONE) {
+		echo "Input JSON is bad!";
+		return false;
+	}
+	
+	if(!isset($allData['comments'])) {
+		echo "JSON file missing comments!";
+		//var_dump($allData);
+		return false;
+	}
+	
+	echo "<h3>"	
+	
 
 }
 
