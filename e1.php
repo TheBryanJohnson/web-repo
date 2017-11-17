@@ -10,16 +10,7 @@
 */
 
 
-function end_html() {
-
-echo "
-</body>
-</html>
-";
-}
-
 if (isset($_GET['title']) && isset($_GET['results'])) {
-	//validate title and results
 	process_form();
 } else {
 	display_form();
@@ -27,50 +18,57 @@ if (isset($_GET['title']) && isset($_GET['results'])) {
 
 
 function process_form() {
+	start_html();
 
-start_html();
+	$title = $_GET['title'];
+	$results = $_GET['results'];
+	$searchTerm = $_GET['searchTerm'];
+	
+	echo showResults($searchTerm);
 
-$title = $_GET['title'];
-$results = $_GET['results'];
-$searchTerm = $_GET['searchTerm'];
-
-echo $title, $results, $searchTerm;
-
-end_html();
-
-
+	end_html();
 }
 
 function display_form() {
-
-start_html();
+	start_html();
 ?>
-<form action="e1.php" method="get">
-	Title:
-	<input type='number' name='title'><br><br>
-	Results:
-	<input type='number' name='results'><br><br>
-	Search Term:
-	<input type='number' name='searchTerm'><br><br>
-	<input type='submit' value='Pls'>
-</form>
-
+	<form action="e1.php" method="get">
+		Title:
+		<input type='number' name='title'><br><br>
+		Results:
+		<input type='number' name='results'><br><br>
+		Search Term:
+		<input type='text' name='searchTerm'><br><br>
+		<input type='submit' value='Pls'>
+	</form>
 <?php
-end_html();
+	end_html();
+}
+
+function showResults($fileName) {
+	if(!file_exists($fileName)) {
+		return false;
+	}
+	return "yes";
+
 }
 
 function start_html() {
-
-echo "
-<html>
-<head>
-<title>Sports!</title>
-</head>
-<body>
-<h1>FanXelk</h1>
-";
-
+	echo "
+	<html>
+	<head>
+		<title>Sports!</title>
+	</head>
+	<body>
+		<h1>FanXelk</h1>
+	";
 }
 
+function end_html() {
+	echo "
+	</body>
+	</html>
+	";
+}
 
 ?>
