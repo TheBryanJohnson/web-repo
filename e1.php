@@ -74,8 +74,8 @@ function showResults($fileName) {
 		return false;
 	}
 	
-	echo "<h3>"	
-	
+	echo "<h3>";	
+		
 
 }
 
