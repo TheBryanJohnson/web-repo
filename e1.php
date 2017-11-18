@@ -24,7 +24,7 @@ function process_form() {
 	$results = $_GET['results'];
 	$searchTerm = $_GET['searchTerm'];
 	
-	showResults($searchTerm);
+	showResults($results, $searchTerm);
 
 	end_html();
 }
@@ -65,7 +65,7 @@ function display_form() {
 	end_html();
 }
 
-function showResults($fileName) {
+function showResults($fileName, $sTerm) {
 	if(!file_exists($fileName)) {
 		echo "File not found!";
 		return false;
@@ -78,15 +78,38 @@ function showResults($fileName) {
 		return false;
 	}
 	
-	if(!isset($allData['comments'])) {
-		echo "JSON file missing comments!";
-		//var_dump($allData);
+	if(!isset($allData['comments']) || !isset($allData['games'])) {
+		echo "JSON file missing comments or games!";
 		return false;
 	}
 	
-	echo "<h3>";	
-		
+	echo "<h3>";
+	foreach ($allData['comments'] as $line) {
+		echo $line, "&nbsp;";
+	}
+	echo "</h3>";
 
+	$wincount = 0;
+	foreach ($allData['games'] as $game) {
+		echo "~~~~~~~~~~<br>";
+		$keys = array_keys($game);
+		for ($i=0; $i<count($keys); $i++) {
+			$cont = $keys[$i].": ".$game[$keys[$i]];
+			if($sTerm === $keys[$i]) {
+				echo "<b>".$cont."</b>";
+			}
+			else {
+				echo "<p>".$cont."</p>";
+			}
+			//update win counter
+			if($keys[$i] === "WinorLose" && $game[$keys[$i]] === "W") {
+				$wincount++;
+			}
+		}
+	}
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>";
+	echo "Wins: ".$wincount." out of ".count($allData['games'])."<br>";
+	echo "Avg. Winrate: ".$wincount*100/count($allData['games'])."%";
 }
 
 function start_html() {
