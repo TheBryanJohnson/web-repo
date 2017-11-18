@@ -35,8 +35,18 @@ function display_form() {
 	<form action="e1.php" method="get">
 		Title:
 		<select name='title'><br><br>
+
 			<option value = "">Select...</option>
-			<option value = "idk what this is">Sport</option>
+
+<?php
+			echo '<select>';
+			$thing = json_decode(file_get_contents($fileName), true);
+			foreach($thing->sport  as &option){
+				echo '<option value=' . &option['title'] . '</option>';
+			}
+			echo '</select>';
+?>
+
 		</select>
 		&nbsp;&nbsp;&nbsp;
 		Results:
