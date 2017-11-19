@@ -34,28 +34,25 @@ function display_form() {
 ?>
 	<form action="e1.php" method="get">
 		Title:
-		<select name='title'><br><br>
-
+		<select name='title'>
 			<option value = "">Select...</option>
 
 <?php
-			echo '<select>';
-			$thing = json_decode(file_get_contents($fileName), true);
-			foreach($thing->sport  as &option){
-				echo '<option value=' . &option['title'] . '</option>';
+			$sports = json_decode(file_get_contents('Sports.json'), true);
+			foreach ($sports['sport'] as $sport) {
+				//echo implode('_', $sport['title']);
+				echo '<option value="">' . $sport['title'] . '</option>';
 			}
-			echo '</select>';
 ?>
-
-		</select>
+		<select>
 		&nbsp;&nbsp;&nbsp;
 		Results:
-		<select name='results'><br><br>
+		<select name='results'>
 			<option value = "">Select...</option>
 		</select>
 		&nbsp;&nbsp;&nbsp;
 		Search Term:
-		<select name='searchTerm'><br><br>
+		<select name='searchTerm'>
 			<option value = "">Select...</option>
 		</select>
 		&nbsp;&nbsp;&nbsp;
