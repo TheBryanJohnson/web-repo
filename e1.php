@@ -49,11 +49,23 @@ function display_form() {
 		Results:
 		<select name='results'>
 			<option value = "">Select...</option>
+<?php
+			foreach ($sports['sport'] as $res) {
+				$resKeys = array_keys($res['results']);
+				for ($p=0; $p<count($resKeys); $p++) {
+					echo '<option value="">' . $resKeys[$p] . '</option>';
+				}
+			}
+?>
+
 		</select>
 		&nbsp;&nbsp;&nbsp;
 		Search Term:
 		<select name='searchTerm'>
 			<option value = "">Select...</option>
+<?php
+			//foreach ($sports
+?>
 		</select>
 		&nbsp;&nbsp;&nbsp;
 		<input type='submit' value='SEND IT'>
