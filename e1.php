@@ -1,12 +1,19 @@
 <?php
 
 /*Authors: William Miller, Bryan Johnson
-* 
-*
-*
-*
-*
-*
+* Purpose: FanXelk, a web service that displays sports statistics. 
+* Functionality:
+*  a) [Implemented] PHP program runs without runtime errors/warnings and
+*     performs basic JSON reporting
+*  b) [Implemented] PHP program performs searches, highlighting the included
+*     search term
+*  c) [Implemented] PHP correctly and properly reads files from the directory
+*     and converts them to JSON objects
+*  d) [Implemented] PHP program presents a dynamic, file-based HTML form
+*  e) [Implemented] PHP program is secure and returns appropriate error
+*     messages
+*  f) [Implemented] PHP program is robust atainst missing/incorrect JSON 
+*     elements
 */
 
 
@@ -24,7 +31,34 @@ function process_form() {
 	$results = $_GET['results'];
 	$searchTerm = $_GET['searchTerm'];
 	
-	showResults($results, $searchTerm);
+	//showResults($results, $searchTerm);
+	
+	//Fix the input fields: they will come in with _'s instead of spaces
+	$title = str_replace('_', ' ', $title);
+	$results = str_replace('_', ' ', $results);
+	$searchTerm = str_replace('_', ' ', $searchTerm);
+
+	//Start from scratch for security
+	$sports = json_decode(file_get_contents('Sports.json'), true);
+	$titleFailed = true;
+	foreach($sports['sport'] as $sport) {
+		if($sport['title'] === $title) {
+			$titleFailed = false;
+			foreach($sport['results'] as $key => $fileName) {
+				if($key === $results) {
+					showResults($fileName, $searchTerm);
+					end_html();
+					return;
+				}
+			}
+		}
+	}
+	if($titleFailed) {
+		echo "<p> Title not found, please use the HTML form! </p>";
+	}
+	else {
+		echo "<p> Results not found! Try a different season. </p>";	
+	}
 
 	end_html();
 }
@@ -40,8 +74,10 @@ function display_form() {
 <?php
 			$sports = json_decode(file_get_contents('Sports.json'), true);
 			foreach ($sports['sport'] as $sport) {
-				//echo implode('_', $sport['title']);
-				echo '<option value="">' . $sport['title'] . '</option>';
+				$tmp = str_replace(' ', '_', $sport['title']);
+				if(!$tmp=="") {
+					echo '<option value='.$tmp.'>' . $sport['title'] . '</option>';
+				}
 			}
 ?>
 		<select>
@@ -53,7 +89,11 @@ function display_form() {
 			foreach ($sports['sport'] as $res) {
 				$resKeys = array_keys($res['results']);
 				for ($p=0; $p<count($resKeys); $p++) {
-					echo '<option value="">' . $resKeys[$p] . '</option>';
+					//possibly not really needed here but makes it more robust
+					$tmp = str_replace(' ', '_', $resKeys[$p]);
+					if(!$tmp="") {
+						echo '<option value='.$tmp.'>' . $resKeys[$p] . '</option>';
+					}
 				}
 			}
 ?>
@@ -64,11 +104,29 @@ function display_form() {
 		<select name='searchTerm'>
 			<option value = "">Select...</option>
 <?php
-			//foreach ($sports
+			$allTerms = [];
+			$termDupe = false;
+			foreach ($sports['sport'] as $sport) {
+				foreach($sport['searchterms'] as $term1) {
+					$termDupe = false;
+					foreach($allTerms as $term2) {
+						if($term1==$term2) {
+							$termDupe = true;	
+						}
+					}
+					if(!$termDupe) {
+						array_push($allTerms, $term1);
+						$tmp = str_replace(' ', '_', $term1);
+						if(!$tmp="") {
+						echo '<option value='.$tmp.'>' . $term1 . '</option>';
+						}
+					}
+				}
+			}
 ?>
 		</select>
 		&nbsp;&nbsp;&nbsp;
-		<input type='submit' value='SEND IT'>
+		<input type='submit' value='Submit'>
 	</form>
 <?php
 	end_html();
@@ -129,6 +187,8 @@ function start_html() {
 	</head>
 	<body>
 		<h1>FanXelk</h1>
+		<p>Disclaimer: A particular sport may not have information for a selected season.</p>
+		<p>Disclaimer2: If a particular search term is not found, it will be ignored.</p>
 	";
 }
 
