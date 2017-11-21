@@ -91,7 +91,7 @@ function display_form() {
 				for ($p=0; $p<count($resKeys); $p++) {
 					//possibly not really needed here but makes it more robust
 					$tmp = str_replace(' ', '_', $resKeys[$p]);
-					if(!$tmp="") {
+					if(!$tmp=="") {
 						echo '<option value='.$tmp.'>' . $resKeys[$p] . '</option>';
 					}
 				}
@@ -117,7 +117,7 @@ function display_form() {
 					if(!$termDupe) {
 						array_push($allTerms, $term1);
 						$tmp = str_replace(' ', '_', $term1);
-						if(!$tmp="") {
+						if(!$tmp=="") {
 						echo '<option value='.$tmp.'>' . $term1 . '</option>';
 						}
 					}
