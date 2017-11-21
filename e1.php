@@ -16,14 +16,16 @@
 *     elements
 */
 
-
+//Starting action; if the form's been submitted, process it, otherwise
+//display the form
 if (isset($_GET['title']) && isset($_GET['results'])) {
 	process_form();
 } else {
 	display_form();
 }
 
-
+//Process the form, checking for validity and printing off the requested
+//records
 function process_form() {
 	start_html();
 
@@ -132,6 +134,7 @@ function display_form() {
 	end_html();
 }
 
+//Show results of a given fileName along with an optional search term.
 function showResults($fileName, $sTerm) {
 	if(!file_exists($fileName)) {
 		echo "File not found!";
@@ -179,6 +182,7 @@ function showResults($fileName, $sTerm) {
 	echo "Avg. Winrate: ".$wincount*100/count($allData['games'])."%";
 }
 
+//HTML header
 function start_html() {
 	echo "
 	<html>
@@ -192,6 +196,7 @@ function start_html() {
 	";
 }
 
+//HTML closing tags
 function end_html() {
 	echo "
 	</body>
