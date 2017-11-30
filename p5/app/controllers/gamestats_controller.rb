@@ -1,10 +1,13 @@
 class GamestatsController < ApplicationController
-  def index
+  def search
+	@thetitle = "CHANGEME"
   end
 
-  def search
+  def index
+	@thetitle = "CHANGEME"
   end
 
   def create
+	@thetitle = "CHANGEME"
   end
 end

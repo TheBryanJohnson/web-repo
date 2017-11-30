@@ -1,2 +1,26 @@
-<h1>Gamestats#create</h1>
-<p>Find me in app/views/gamestats/create.html.erb</p>
+<h1>Create Report</h1>
+
+    <%
+        require "json"
+        scoreFile = "public/Sports.json"
+
+        @formTitle = params[:gamestat][:title]
+        @formResult = params[:gamestat][:results]
+        @formSearchterm = params[:gamestat][:searchterm]
+        %>
+        Search parameters:<br>
+        <%= @formTitle %>
+        <%= @formResult %>
+        <%= @formSearchterm %>
+
+
+	    Start of code here!
+		<%
+			require "json"
+			sportsFile = "public/Sports.json"
+		%>
+
+			<%= "Open the file " %>
+			<%= sportsFile %>
+    <br>
+    <%= link_to 'Perform new search', gamestats_search_path %>

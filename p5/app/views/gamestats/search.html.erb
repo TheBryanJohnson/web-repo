@@ -1,2 +1,26 @@
-<h1>Gamestats#search</h1>
+<h1><%= @thetitle %></h1>
+
+Hello!  Welcome to <%= @thetitle %><p>
+
 <p>Find me in app/views/gamestats/search.html.erb</p>
+<p>Need to add ERB code to make these drop down menus!</p>
+<%= form_for :gamestat, url: gamestats_path do |f| %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+    </p>
+             
+    <p>
+    <%= f.label :results %><br>
+    <%= f.text_field :results %>
+    </p>
+
+    <p>
+    <%= f.label :searchterm %><br>
+    <%= f.text_field :searchterm %>
+    </p>
+                          
+    <p>
+        <%= f.submit :Search %>
+    </p>
+<% end %>
